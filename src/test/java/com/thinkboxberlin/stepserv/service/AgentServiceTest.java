@@ -2,7 +2,10 @@ package com.thinkboxberlin.stepserv.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.thinkboxberlin.stepserv.model.Agent;
@@ -12,12 +15,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@RunWith(SpringRunner.class)
+@SpringBootTest
 public class AgentServiceTest {
     @Mock
     private AgentRepository agentRepository;
@@ -70,5 +72,17 @@ public class AgentServiceTest {
         final Agent agent = agentService.getAgentByUuid("4711");
         assertEquals(agent.getAgentUuid(), "4711");
         assertThrows(NoSuchElementException.class, () -> agentService.getAgentByUuid("1234"));
+    }
+
+    @Test
+    public void shouldSaveAgentData() {
+        final AgentService agentService = new AgentService(agentRepository);
+        agentService.save(Agent.builder()
+            .agentUuid("4711")
+            .agentName("Tester 1")
+            .lastSeen(new Date())
+            .currentLocation("unknown")
+            .build());
+        verify(agentRepository, times(1)).save(any());
     }
 }
