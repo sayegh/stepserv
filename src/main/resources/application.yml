@@ -2,7 +2,18 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     password: post-post
-#    url: jdbc:postgresql://localhost:5432/stepserv
+    url: jdbc:postgresql://localhost:5432/stepserv
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+---
+spring:
+  profiles: dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: post-post
     url: jdbc:postgresql://172.17.0.2:5432/stepserv
     username: postgres
   jpa:
