@@ -124,6 +124,16 @@
 		{
 			"name": "get-agent-data",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARERTOKEN}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -173,7 +183,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"agentUuid\": \"5a856455-662d-4d49-94d6-ece783df3871\",\n    \"agentName\": \"Lava Babii\",\n    \"lastSeen\": \"2023-11-20T12:32:30.544+00:00\",\n    \"currentLocation\": \"unknown\",\n    \"tags\": [\"one\", \"two\"]\n}",
+					"raw": "{\n    \"agentUuid\": \"5a856455-662d-4d49-94d6-ece783df3871\",\n    \"agentName\": \"La Paloma Blanca\",\n    \"lastSeen\": \"2023-11-20T12:32:30.544+00:00\",\n    \"currentLocation\": \"unknown\",\n    \"tags\": [\"one\", \"two\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
