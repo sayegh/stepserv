@@ -28,7 +28,7 @@ public class AuthController {
     private TokenProvider tokenService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody @Valid SignUpDto data) {
+    public ResponseEntity<?> signUp(@RequestBody @Valid SignUpDto data) throws Exception {
         service.signUp(data);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -1,5 +1,6 @@
 package com.thinkboxberlin.stepserv.security.service;
 
+import com.thinkboxberlin.stepserv.security.exception.LoginAlreadyExistsException;
 import com.thinkboxberlin.stepserv.security.model.SignUpDto;
 import com.thinkboxberlin.stepserv.security.model.User;
 import com.thinkboxberlin.stepserv.security.repository.UserRepository;
@@ -21,9 +22,9 @@ public class AuthService implements UserDetailsService {
         return user;
     }
 
-    public UserDetails signUp(SignUpDto data) throws RuntimeException {
+    public UserDetails signUp(SignUpDto data) throws LoginAlreadyExistsException {
         if (repository.findByLogin(data.login()) != null) {
-            throw new RuntimeException("Username already exists");
+            throw new LoginAlreadyExistsException();
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User newUser = new User(data.login(), encryptedPassword, data.role());
