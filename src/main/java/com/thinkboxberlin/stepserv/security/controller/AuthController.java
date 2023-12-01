@@ -5,7 +5,7 @@ import com.thinkboxberlin.stepserv.security.model.SignInDto;
 import com.thinkboxberlin.stepserv.security.model.SignUpDto;
 import com.thinkboxberlin.stepserv.security.model.User;
 import com.thinkboxberlin.stepserv.security.service.AuthService;
-import com.thinkboxberlin.stepserv.security.service.TokenProviderService;
+import com.thinkboxberlin.stepserv.security.service.TokenProvider;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class AuthController {
     @Autowired
     private AuthService service;
     @Autowired
-    private TokenProviderService tokenService;
+    private TokenProvider tokenService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid SignUpDto data) {
