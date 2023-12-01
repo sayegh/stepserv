@@ -34,8 +34,10 @@ public class AuthServiceTest {
     @Test
     @SneakyThrows
     public void shouldSaveNewUser() {
+        UserRole userRole = UserRole.USER;
         authService.signUp(new SignUpDto(TEST_LOGIN, TEST_PASSWORD, UserRole.USER));
         verify(userRepository, times(1)).save(any());
+        assertEquals(userRole.getValue(), "user");
     }
 
     @Test
