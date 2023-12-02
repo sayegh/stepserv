@@ -7,6 +7,7 @@ import com.thinkboxberlin.stepserv.security.model.User;
 import com.thinkboxberlin.stepserv.security.service.AuthService;
 import com.thinkboxberlin.stepserv.security.service.TokenProvider;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Slf4j
 public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -29,6 +31,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid SignUpDto data) throws Exception {
+        log.info("Received singup request for " + data.toString());
         service.signUp(data);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

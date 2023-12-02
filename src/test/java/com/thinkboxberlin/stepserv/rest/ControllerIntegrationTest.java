@@ -46,6 +46,8 @@ public class ControllerIntegrationTest {
     final String TEST_AGENT_NAME_1 = "Stan Laurel";
     final String TEST_AGENT_ID_2 = "5678";
     final String TEST_AGENT_NAME_2 = "Oliver Hardy";
+    final String TEST_NON_EXISTENT_ID = "ABCD";
+
 
     @Autowired
     private MockMvc mockMvc;
@@ -112,7 +114,16 @@ public class ControllerIntegrationTest {
     }
 
     @Test
-    public void should() throws Exception {
+    public void shouldNotFindAgentByUuid() throws Exception {
+        final String uri = "/get-agent-data?uuid=" + TEST_NON_EXISTENT_ID;
+        mockMvc.perform(MockMvcRequestBuilders.get(uri)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldCreateRandomAgentInDatabase() throws Exception {
         // Given
         final String uri = "/create-agent";
         final String agentUuid = UUID.randomUUID().toString();
