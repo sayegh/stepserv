@@ -1,9 +1,12 @@
 package com.thinkboxberlin.stepserv.rest;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.thinkboxberlin.stepserv.Application;
 import com.thinkboxberlin.stepserv.model.Agent;
 import com.thinkboxberlin.stepserv.security.authentication.UserRole;
@@ -13,8 +16,10 @@ import com.thinkboxberlin.stepserv.security.model.User;
 import com.thinkboxberlin.stepserv.security.service.AuthService;
 import com.thinkboxberlin.stepserv.security.service.TokenProvider;
 import com.thinkboxberlin.stepserv.service.AgentService;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -105,4 +110,32 @@ public class ControllerIntegrationTest {
             .andExpect(content().string(containsString(TEST_AGENT_NAME_2)))
             .andExpect(content().string(containsString(TEST_AGENT_ID_2)));
     }
+
+    @Test
+    public void should() throws Exception {
+        // Given
+        final String uri = "/create-agent";
+        final String agentUuid = UUID.randomUUID().toString();
+        final String agentName = "Create Agent Test";
+        final Agent agent = Agent.builder()
+            .agentUuid(agentUuid)
+            .agentName(agentName)
+            .currentLocation("Who knows")
+            .tags(new ArrayList<String>())
+            .build();
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
+        String requestJson = objectWriter.writeValueAsString(agent);
+        log.info(requestJson);
+        // When
+        mockMvc.perform(MockMvcRequestBuilders.put(uri)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
+                .andExpect(content().string(containsString(agentUuid)));
+        // Then
+        assertEquals(agentService.getAgentByUuid(agentUuid).getAgentName(), agentName);
+    }
+
 }
