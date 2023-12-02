@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.thinkboxberlin.stepserv.Application;
 import com.thinkboxberlin.stepserv.security.authentication.UserRole;
+import com.thinkboxberlin.stepserv.security.exception.LoginAlreadyExistsException;
 import com.thinkboxberlin.stepserv.security.model.SignInDto;
 import com.thinkboxberlin.stepserv.security.model.SignUpDto;
 import com.thinkboxberlin.stepserv.security.service.AuthService;
@@ -36,13 +37,15 @@ public class AuthControllerIntegrationTest {
 
     @Test
     public void shouldSignup() throws Exception {
+        // Given
         final String uri = URL_ROOT + "/signup";
         final SignUpDto signUpDto = new SignUpDto(TEST_USER_NAME_SIGNUP, TEST_USER_PASSWORD_SIGNUP, UserRole.USER);
 
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(signUpDto);
-        log.info(requestJson);
+
+        // When / Then
         mockMvc.perform(MockMvcRequestBuilders.post(uri)
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
             .andExpect(status().isCreated());
@@ -51,18 +54,42 @@ public class AuthControllerIntegrationTest {
     @Test
     public void shouldSignIn() throws Exception {
         // Given
-        authService.signUp(new SignUpDto(TEST_USER_NAME_SIGNIN, TEST_USER_PASSWORD_SIGNIN, UserRole.USER));
+        try {
+            authService.signUp(new SignUpDto(TEST_USER_NAME_SIGNIN, TEST_USER_PASSWORD_SIGNIN, UserRole.USER));
+        } catch(LoginAlreadyExistsException ex) {
+            // ignored
+        }
         final String uri = URL_ROOT + "/signin";
         final SignInDto signInDto = new SignInDto(TEST_USER_NAME_SIGNIN, TEST_USER_PASSWORD_SIGNIN);
 
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(signInDto);
-        log.info(requestJson);
 
         // When / Then
         mockMvc.perform(MockMvcRequestBuilders.post(uri)
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldNotSignIn() throws Exception {
+        // Given
+        try {
+            authService.signUp(new SignUpDto(TEST_USER_NAME_SIGNIN, TEST_USER_PASSWORD_SIGNIN, UserRole.USER));
+        } catch(LoginAlreadyExistsException ex) {
+            // ignored
+        }
+        final String uri = URL_ROOT + "/signin";
+        final SignInDto signInDto = new SignInDto(TEST_USER_NAME_SIGNIN, "wrong password");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
+        String requestJson = objectWriter.writeValueAsString(signInDto);
+
+        // When / Then
+        mockMvc.perform(MockMvcRequestBuilders.post(uri)
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+            .andExpect(status().isForbidden());
     }
 }
