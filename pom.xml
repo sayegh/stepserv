@@ -13,6 +13,7 @@
     <properties>
         <java.version>19</java.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
+		<h2.database.version>2.2.224</h2.database.version>
         <checkstyle.maven.plugin.version>3.0.0</checkstyle.maven.plugin.version>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
@@ -47,6 +48,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <version>${h2.database.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
