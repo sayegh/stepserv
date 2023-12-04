@@ -1,4 +1,4 @@
-package com.thinkboxberlin.stepserv.security;
+package com.thinkboxberlin.stepserv.security.controller;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

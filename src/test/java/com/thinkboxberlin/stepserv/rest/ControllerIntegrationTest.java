@@ -14,7 +14,7 @@ import com.thinkboxberlin.stepserv.security.exception.LoginAlreadyExistsExceptio
 import com.thinkboxberlin.stepserv.security.model.SignUpDto;
 import com.thinkboxberlin.stepserv.security.model.User;
 import com.thinkboxberlin.stepserv.security.service.AuthService;
-import com.thinkboxberlin.stepserv.security.service.TokenProvider;
+import com.thinkboxberlin.stepserv.security.service.TokenProviderService;
 import com.thinkboxberlin.stepserv.service.AgentService;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +23,6 @@ import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -40,6 +39,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 @Slf4j
 public class ControllerIntegrationTest {
+    final String URL_ROOT = "/api/v1/step";
     final String TEST_LOGIN = "testuser";
     final String TEST_PASSWORD = "testpassword";
     final String TEST_AGENT_ID_1 = "1234";
@@ -48,13 +48,12 @@ public class ControllerIntegrationTest {
     final String TEST_AGENT_NAME_2 = "Oliver Hardy";
     final String TEST_NON_EXISTENT_ID = "ABCD";
 
-
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private TokenProvider tokenService;
+    private TokenProviderService tokenService;
     @Autowired
     private AuthService authService;
     @Autowired
@@ -72,7 +71,6 @@ public class ControllerIntegrationTest {
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(TEST_LOGIN, TEST_PASSWORD);
         Authentication authUser = authenticationManager.authenticate(usernamePassword);
         accessToken = tokenService.generateAccessToken((User) authUser.getPrincipal());
-        log.info("Access token: " + accessToken);
         agentService.save(Agent.builder()
             .agentUuid(TEST_AGENT_ID_1)
             .agentName(TEST_AGENT_NAME_1)
@@ -89,9 +87,10 @@ public class ControllerIntegrationTest {
             .build());
     }
 
-    @ParameterizedTest
+    @Test
     @ValueSource(strings = {"/all"}) // six numbers
-    public void shouldReturnOKForRequests(final String uri) throws Exception {
+    public void shouldReturnOKForRequests() throws Exception {
+        final String uri = "/all";
         mockMvc.perform(MockMvcRequestBuilders.get(uri)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -137,7 +136,6 @@ public class ControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(agent);
-        log.info(requestJson);
         // When
         mockMvc.perform(MockMvcRequestBuilders.put(uri)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)

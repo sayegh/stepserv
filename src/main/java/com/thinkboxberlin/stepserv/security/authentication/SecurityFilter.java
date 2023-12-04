@@ -1,7 +1,7 @@
 package com.thinkboxberlin.stepserv.security.authentication;
 
 import com.thinkboxberlin.stepserv.security.repository.UserRepository;
-import com.thinkboxberlin.stepserv.security.service.TokenProvider;
+import com.thinkboxberlin.stepserv.security.service.TokenProviderService;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
-    TokenProvider tokenProvider;
+    TokenProviderService tokenProvider;
     @Autowired
     UserRepository userRepository;
 

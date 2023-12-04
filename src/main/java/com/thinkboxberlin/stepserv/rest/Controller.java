@@ -23,13 +23,11 @@ public class Controller {
 
     @GetMapping("/all")
     public List<Agent> getAllAgents() {
-        log.info("Returning all agents in database");
         return agentService.getAllAgents();
     }
 
     @GetMapping("/get-agent-data")
     public Agent getAgentData(@RequestParam(value = "uuid") final String uuid) {
-        log.info("Looking for agent with ID '{}'", uuid);
         try {
             return agentService.getAgentByUuid(uuid);
         } catch (NoSuchElementException ex) {
