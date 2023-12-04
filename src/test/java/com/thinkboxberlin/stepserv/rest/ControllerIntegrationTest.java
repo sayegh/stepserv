@@ -90,7 +90,7 @@ public class ControllerIntegrationTest {
     @Test
     @ValueSource(strings = {"/all"}) // six numbers
     public void shouldReturnOKForRequests() throws Exception {
-        final String uri = "/all";
+        final String uri = URL_ROOT + "/all";
         mockMvc.perform(MockMvcRequestBuilders.get(uri)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -102,7 +102,7 @@ public class ControllerIntegrationTest {
 
     @Test
     public void shouldFindAgentByUuid() throws Exception {
-        final String uri = "/get-agent-data?uuid=" + TEST_AGENT_ID_2;
+        final String uri = URL_ROOT + "/get-agent-data?uuid=" + TEST_AGENT_ID_2;
         mockMvc.perform(MockMvcRequestBuilders.get(uri)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -114,7 +114,7 @@ public class ControllerIntegrationTest {
 
     @Test
     public void shouldNotFindAgentByUuid() throws Exception {
-        final String uri = "/get-agent-data?uuid=" + TEST_NON_EXISTENT_ID;
+        final String uri = URL_ROOT + "/get-agent-data?uuid=" + TEST_NON_EXISTENT_ID;
         mockMvc.perform(MockMvcRequestBuilders.get(uri)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -124,7 +124,7 @@ public class ControllerIntegrationTest {
     @Test
     public void shouldCreateRandomAgentInDatabase() throws Exception {
         // Given
-        final String uri = "/create-agent";
+        final String uri = URL_ROOT + "/create-agent";
         final String agentUuid = UUID.randomUUID().toString();
         final String agentName = "Create Agent Test";
         final Agent agent = Agent.builder()
@@ -133,9 +133,9 @@ public class ControllerIntegrationTest {
             .currentLocation("Who knows")
             .tags(new ArrayList<String>())
             .build();
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
-        String requestJson = objectWriter.writeValueAsString(agent);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
+        final String requestJson = objectWriter.writeValueAsString(agent);
         // When
         mockMvc.perform(MockMvcRequestBuilders.put(uri)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
