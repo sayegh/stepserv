@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"login\": \"myusername3\",\n  \"password\": \"123456\",\n  \"role\": \"USER\"\n}",
+					"raw": "{\n  \"login\": \"myusername4\",\n  \"password\": \"123456\",\n  \"role\": \"USER\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -189,7 +189,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"agentUuid\": \"5a856455-662d-4d49-94d6-ece783df3871\",\n    \"agentName\": \"La Paloma Blanca\",\n    \"lastSeen\": \"2023-11-20T12:32:30.544+00:00\",\n    \"currentLocation\": \"unknown\",\n    \"tags\": [\"one\", \"two\"]\n}",
+					"raw": "{\n    \"agentUuid\": \"b49ba0a8-4e0f-4cd3-95cb-aac4eeb41579\",\n    \"agentName\": \"Vito Dean\",\n    \"lastSeen\": \"2023-11-20T12:32:30.544+00:00\",\n    \"currentLocation\": \"unknown\",\n    \"tags\": [\"one\", \"two\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"

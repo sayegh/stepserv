@@ -13,6 +13,12 @@ The build process also runs JUnit tests and produces a Jacoco test coverage repo
 mvn clean package
 ````
 
+Run Jacoco test coverage checks:
+
+````
+mvn verify
+````
+
 ## Run
 
 The application requires a Postgres database to be reachable at

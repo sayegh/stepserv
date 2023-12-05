@@ -16,12 +16,14 @@ public class IdentityVerificationServiceIntegrationTest {
 
     @Test
     public void shouldVerifyIdentity() throws IdentityVerificationFailedException {
+        // Checking for existent agent.
         identityVerificationService.verifyIdentity(BASE_URL, "Vito", "Dean",
             "b49ba0a8-4e0f-4cd3-95cb-aac4eeb41579");
     }
 
     @Test
     public void shouldDetectBogusIdentity() {
+        // Checking for non-existent agent.
         assertThrows(IdentityVerificationFailedException.class,
             () -> identityVerificationService.verifyIdentity(BASE_URL, "Bogus", "MacSchmogus",
             "b49ba0a8-4e0f-4cd3-95cb-aac4eeb41579")
@@ -30,6 +32,7 @@ public class IdentityVerificationServiceIntegrationTest {
 
     @Test
     public void shouldDetectMismatch() {
+        // Checking with wrong UUID.
         assertThrows(IdentityVerificationFailedException.class,
             () -> identityVerificationService.verifyIdentity(BASE_URL, "Vito", "Dean",
                 "b49ba0a8-0000-4cd3-95cb-aac4eeb41579")
