@@ -2,13 +2,16 @@ package com.thinkboxberlin.stepserv.rest;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.thinkboxberlin.stepserv.Application;
+import com.thinkboxberlin.stepserv.exception.IdentityVerificationFailedException;
 import com.thinkboxberlin.stepserv.model.Agent;
+import com.thinkboxberlin.stepserv.repository.AgentRepository;
 import com.thinkboxberlin.stepserv.security.authentication.UserRole;
 import com.thinkboxberlin.stepserv.security.exception.LoginAlreadyExistsException;
 import com.thinkboxberlin.stepserv.security.model.SignUpDto;
@@ -16,6 +19,7 @@ import com.thinkboxberlin.stepserv.security.model.User;
 import com.thinkboxberlin.stepserv.security.service.AuthService;
 import com.thinkboxberlin.stepserv.security.service.TokenProviderService;
 import com.thinkboxberlin.stepserv.service.AgentService;
+import com.thinkboxberlin.stepserv.service.IdentityVerificationService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -24,6 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,10 +49,10 @@ public class ControllerIntegrationTest {
     final String URL_ROOT = "/api/v1/step";
     final String TEST_LOGIN = "testuser";
     final String TEST_PASSWORD = "testpassword";
-    final String TEST_AGENT_ID_1 = "1234";
-    final String TEST_AGENT_NAME_1 = "Stan Laurel";
-    final String TEST_AGENT_ID_2 = "5678";
-    final String TEST_AGENT_NAME_2 = "Oliver Hardy";
+    final String TEST_AGENT_ID_1 = "c5a07167-9bbe-4944-a7b0-a9677afa134d";
+    final String TEST_AGENT_NAME_1 = "Rider Linden";
+    final String TEST_AGENT_ID_2 = "596d50cc-69f7-4c7c-a579-145ba744a64f";
+    final String TEST_AGENT_NAME_2 = "Vix Linden";
     final String TEST_NON_EXISTENT_ID = "ABCD";
 
     @Autowired
@@ -62,7 +69,7 @@ public class ControllerIntegrationTest {
     private String accessToken = null;
 
     @BeforeEach
-    public void setupAndPopulateDatabase() {
+    public void setupAndPopulateDatabase() throws IdentityVerificationFailedException {
         try {
             authService.signUp(new SignUpDto(TEST_LOGIN, TEST_PASSWORD, UserRole.USER));
         } catch(LoginAlreadyExistsException ex) {
@@ -71,14 +78,14 @@ public class ControllerIntegrationTest {
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(TEST_LOGIN, TEST_PASSWORD);
         Authentication authUser = authenticationManager.authenticate(usernamePassword);
         accessToken = tokenService.generateAccessToken((User) authUser.getPrincipal());
-        agentService.save(Agent.builder()
+        agentService.registerAgent(Agent.builder()
             .agentUuid(TEST_AGENT_ID_1)
             .agentName(TEST_AGENT_NAME_1)
             .tags(Arrays.asList("foo", "bar"))
             .lastSeen(new Date())
             .currentLocation("unknown")
             .build());
-        agentService.save(Agent.builder()
+        agentService.registerAgent(Agent.builder()
             .agentUuid(TEST_AGENT_ID_2)
             .agentName(TEST_AGENT_NAME_2)
             .tags(Arrays.asList("foo", "bar"))
@@ -122,11 +129,11 @@ public class ControllerIntegrationTest {
     }
 
     @Test
-    public void shouldCreateRandomAgentInDatabase() throws Exception {
+    public void shouldCreateAgentInDatabase() throws Exception {
         // Given
         final String uri = URL_ROOT + "/create-agent";
-        final String agentUuid = UUID.randomUUID().toString();
-        final String agentName = "Create Agent Test";
+        final String agentUuid = "c1c6f01c-902d-433e-a316-33fa45c9c5d8";
+        final String agentName = "Lettie Linden";
         final Agent agent = Agent.builder()
             .agentUuid(agentUuid)
             .agentName(agentName)

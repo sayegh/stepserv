@@ -1,5 +1,6 @@
 package com.thinkboxberlin.stepserv.rest;
 
+import com.thinkboxberlin.stepserv.exception.IdentityVerificationFailedException;
 import com.thinkboxberlin.stepserv.model.Agent;
 import com.thinkboxberlin.stepserv.service.AgentService;
 import java.util.List;
@@ -41,6 +42,11 @@ public class Controller {
 
     @PutMapping("/create-agent")
     public ResponseEntity<String> createAgent(@RequestBody Agent agentDetails)  {
-        agentService.save(agentDetails);
+        try {
+            agentService.registerAgent(agentDetails);
+        } catch (IdentityVerificationFailedException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid registration data");
+        }
         return ResponseEntity.ok(agentDetails.getAgentUuid());
-    }}
+    }
+}

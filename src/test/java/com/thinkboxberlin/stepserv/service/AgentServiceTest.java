@@ -6,10 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.thinkboxberlin.stepserv.exception.IdentityVerificationFailedException;
 import com.thinkboxberlin.stepserv.model.Agent;
 import com.thinkboxberlin.stepserv.repository.AgentRepository;
 import java.util.ArrayList;
@@ -27,6 +29,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class AgentServiceTest {
     @Mock
     private AgentRepository agentRepository;
+
+    @Mock
+    private IdentityVerificationService identityVerificationService;
 
     @InjectMocks
     private  AgentService agentService;
@@ -85,8 +90,8 @@ public class AgentServiceTest {
     }
 
     @Test
-    public void shouldSaveAgentData() {
-        agentService.save(Agent.builder()
+    public void shouldSaveAgentData() throws IdentityVerificationFailedException {
+        agentService.registerAgent(Agent.builder()
             .agentUuid("4711")
             .agentName("Tester 1")
             .tags(Arrays.asList("foo", "bar"))

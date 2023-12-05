@@ -1,5 +1,6 @@
 package com.thinkboxberlin.stepserv.service;
 
+import com.thinkboxberlin.stepserv.exception.IdentityVerificationFailedException;
 import com.thinkboxberlin.stepserv.model.Agent;
 import com.thinkboxberlin.stepserv.repository.AgentRepository;
 import java.util.List;
@@ -17,6 +18,9 @@ public class AgentService {
     @Autowired
     final AgentRepository agentRepository;
 
+    @Autowired
+    final IdentityVerificationService identityVerificationService;
+
     public List<Agent> getAllAgents() {
         return agentRepository.findAll();
     }
@@ -28,7 +32,12 @@ public class AgentService {
         return agent.get();
     }
 
-    public void save(final Agent agent) {
+    public void registerAgent(final Agent agent) throws IdentityVerificationFailedException {
+        final String[] segments = agent.getAgentName().split(" ");
+        final String username = segments[0];
+        final String lastname = (segments.length == 2 ? segments[1] : "Resident");
+
+        identityVerificationService.verifyIdentity(username, lastname, agent.getAgentUuid());
         agentRepository.save(agent);
     }
 }
