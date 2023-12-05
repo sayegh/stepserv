@@ -154,4 +154,29 @@ public class ControllerIntegrationTest {
         assertEquals(agentService.getAgentByUuid(agentUuid).getAgentName(), agentName);
     }
 
+    @Test
+    public void shouldCreateResidentInDatabase() throws Exception {
+        // Given
+        final String uri = URL_ROOT + "/create-agent";
+        final String agentUuid = "c1c6f01c-902d-433e-a316-33fa45c9c5d8";
+        final String agentName = "Bogus";
+        final Agent agent = Agent.builder()
+            .agentUuid(agentUuid)
+            .agentName(agentName)
+            .currentLocation("Who knows")
+            .tags(new ArrayList<String>())
+            .build();
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
+        final String requestJson = objectWriter.writeValueAsString(agent);
+        // When
+        mockMvc.perform(MockMvcRequestBuilders.put(uri)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
+            .andExpect(content().string(containsString(agentUuid)));
+        // Then
+        assertEquals(agentService.getAgentByUuid(agentUuid).getAgentName(), agentName);
+    }
 }

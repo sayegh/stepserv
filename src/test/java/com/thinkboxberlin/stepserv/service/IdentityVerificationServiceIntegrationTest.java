@@ -25,7 +25,7 @@ public class IdentityVerificationServiceIntegrationTest {
     public void shouldDetectBogusIdentity() {
         // Checking for non-existent agent.
         assertThrows(IdentityVerificationFailedException.class,
-            () -> identityVerificationService.verifyIdentity(BASE_URL, "Bogus", "MacSchmogus",
+            () -> identityVerificationService.verifyIdentity(BASE_URL, "Bogus", "Resident",
             "b49ba0a8-4e0f-4cd3-95cb-aac4eeb41579")
         );
     }

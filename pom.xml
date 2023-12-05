@@ -13,7 +13,7 @@
     <properties>
         <java.version>19</java.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
-		<h2.database.version>2.2.224</h2.database.version>
+        <h2.database.version>2.2.224</h2.database.version>
         <checkstyle.maven.plugin.version>3.0.0</checkstyle.maven.plugin.version>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
@@ -24,13 +24,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-      		<version>${junit.jupiter.version}</version>
+            <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-      		<version>${junit.jupiter.version}</version>
+            <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -153,6 +153,7 @@
                 <configuration>
                     <excludes>
                         <exclude>com/thinkboxberlin/**/model/**</exclude>
+                        <exclude>com/thinkboxberlin/**/Application.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -193,6 +194,23 @@
                                 </rule>
                             </rules>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <configLocation>./checkstyle.xml</configLocation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
