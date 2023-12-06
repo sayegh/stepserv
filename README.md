@@ -1,5 +1,9 @@
 # StepServ
 
+> [!NOTE]
+> This project is work in progress. I may or may not work properly in your environment,
+> can have an intermediate state etc.
+
 A boilerplate CRUD application server skeleton to store and retrieve metaverse avatar data.
 Build is maven-based.
 
