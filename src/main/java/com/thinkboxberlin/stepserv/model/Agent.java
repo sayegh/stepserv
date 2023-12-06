@@ -1,5 +1,6 @@
 package com.thinkboxberlin.stepserv.model;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "agents",
@@ -22,10 +24,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Agent {
     @Id
-    String agentUuid;
-    String agentName;
-    Date lastSeen;
-    String currentLocation;
+    private String agentUuid;
+    private String agentName;
+    private Date lastSeen;
+    private String currentLocation;
     @ElementCollection
-    List<String> tags = new ArrayList<String>();
+    private List<String> tags = new ArrayList<String>();
+    @UpdateTimestamp
+    private Instant lastUpdatedOn;
 }
