@@ -1,4 +1,4 @@
-package com.thinkboxberlin.stepserv.security.controller;
+package com.thinkboxberlin.stepserv.security.rest;
 
 import com.thinkboxberlin.stepserv.security.model.JwtDto;
 import com.thinkboxberlin.stepserv.security.model.SignInDto;

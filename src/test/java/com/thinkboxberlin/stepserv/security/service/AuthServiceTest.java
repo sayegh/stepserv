@@ -13,7 +13,6 @@ import com.thinkboxberlin.stepserv.security.exception.LoginAlreadyExistsExceptio
 import com.thinkboxberlin.stepserv.security.model.SignUpDto;
 import com.thinkboxberlin.stepserv.security.model.User;
 import com.thinkboxberlin.stepserv.security.repository.UserRepository;
-import com.thinkboxberlin.stepserv.security.service.AuthService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,7 +15,6 @@ import com.thinkboxberlin.stepserv.model.Agent;
 import com.thinkboxberlin.stepserv.repository.AgentRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -44,14 +42,12 @@ public class AgentServiceTest {
             .agentUuid("1234")
             .agentName("Tester 1")
             .tags(Arrays.asList("foo", "bar"))
-            .lastSeen(new Date())
             .currentLocation("unknown")
             .build());
         givenAgentList.add(Agent.builder()
             .agentUuid("5678")
             .agentName("Tester 2")
             .tags(Arrays.asList("foo", "bar"))
-            .lastSeen(new Date())
             .currentLocation("unknown")
             .build());
         when(agentRepository.findAll()).thenReturn(givenAgentList);
@@ -73,7 +69,6 @@ public class AgentServiceTest {
                             .agentUuid("4711")
                             .agentName("Tester 1")
                             .tags(Arrays.asList("foo", "bar"))
-                            .lastSeen(new Date())
                             .currentLocation("unknown")
                             .build());
                     } else {
@@ -95,7 +90,6 @@ public class AgentServiceTest {
             .agentUuid("4711")
             .agentName("Tester 1")
             .tags(Arrays.asList("foo", "bar"))
-            .lastSeen(new Date())
             .currentLocation("unknown")
             .build());
         verify(agentRepository, times(1)).save(any());

@@ -40,8 +40,8 @@ public class Controller {
         }
     }
 
-    @PutMapping("/create-agent")
-    public ResponseEntity<String> createAgent(@RequestBody Agent agentDetails)  {
+    @PutMapping("/register-agent")
+    public ResponseEntity<String> registerAgent(@RequestBody Agent agentDetails)  {
         try {
             agentService.registerAgent(agentDetails);
         } catch (IdentityVerificationFailedException e) {

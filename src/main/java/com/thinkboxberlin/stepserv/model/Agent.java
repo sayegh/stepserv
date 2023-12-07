@@ -2,7 +2,6 @@ package com.thinkboxberlin.stepserv.model;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -17,7 +16,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "agents",
-    indexes = { @Index(name = "lastseen_index", columnList = "lastSeen", unique = false) })
+    indexes = { @Index(name = "lastUpdatedOn_index", columnList = "lastUpdatedOn", unique = false) })
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -26,7 +25,6 @@ public class Agent {
     @Id
     private String agentUuid;
     private String agentName;
-    private Date lastSeen;
     private String currentLocation;
     @ElementCollection
     private List<String> tags = new ArrayList<String>();

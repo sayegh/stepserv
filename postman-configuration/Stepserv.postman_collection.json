@@ -162,7 +162,7 @@
 			"response": []
 		},
 		{
-			"name": "create-agent-record",
+			"name": "register-agent",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -189,7 +189,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"agentUuid\": \"b49ba0a8-4e0f-4cd3-95cb-aac4eeb41579\",\n    \"agentName\": \"Vito Dean\",\n    \"lastSeen\": \"2023-11-20T12:32:30.544+00:00\",\n    \"currentLocation\": \"unknown\",\n    \"tags\": [\"one\", \"two\"]\n}",
+					"raw": "{\n    \"agentUuid\": \"b49ba0a8-4e0f-4cd3-95cb-aac4eeb41579\",\n    \"agentName\": \"Vito Dean\",\n    \"currentLocation\": \"unknown\",\n    \"tags\": [\"one\", \"two\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -197,7 +197,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/step/create-agent",
+					"raw": "localhost:8080/api/v1/step/register-agent",
 					"host": [
 						"localhost"
 					],
@@ -206,7 +206,7 @@
 						"api",
 						"v1",
 						"step",
-						"create-agent"
+						"register-agent"
 					]
 				}
 			},
