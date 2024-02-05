@@ -1,5 +1,6 @@
 package com.thinkboxberlin.stepserv.security.authentication;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class AuthConfig {
     @Autowired
     SecurityFilter securityFilter;
@@ -25,11 +27,22 @@ public class AuthConfig {
         return httpSecurity
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(authorize -> authorize
-//                .antMatchers(HttpMethod.GET, "/all").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/auth/*").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/books").hasRole("ADMIN")
-                .anyRequest().authenticated())
+            .authorizeHttpRequests(authorize -> {
+                try {
+                    authorize
+                        .antMatchers(HttpMethod.POST, "/api/v1/auth/*").permitAll()
+                        .and()
+                        .authorizeHttpRequests()
+                        .antMatchers(HttpMethod.PUT, "/api/v1/step/*").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/**").authenticated()
+                        .anyRequest()
+                        .authenticated();
+                        // .and()
+                        // .formLogin().permitAll();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            })
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }

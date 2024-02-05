@@ -17,16 +17,12 @@ public class TokenProviderService {
     private String JWT_SECRET;
 
     public String generateAccessToken(User user) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
-            return JWT.create()
-                .withSubject(user.getUsername())
-                .withClaim("username", user.getUsername())
-                .withExpiresAt(genAccessExpirationDate())
-                .sign(algorithm);
-        } catch (JWTCreationException exception) {
-            throw new JWTCreationException("Error while generating token", exception);
-        }
+        Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
+        return JWT.create()
+            .withSubject(user.getUsername())
+            .withClaim("username", user.getUsername())
+            .withExpiresAt(genAccessExpirationDate())
+            .sign(algorithm);
     }
 
     public String validateToken(String token) {
@@ -36,7 +32,7 @@ public class TokenProviderService {
                 .build()
                 .verify(token)
                 .getSubject();
-        } catch (JWTVerificationException exception) {
+        } catch (final JWTVerificationException exception) {
             throw new JWTVerificationException("Error while validating token", exception);
         }
     }

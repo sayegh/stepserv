@@ -3,6 +3,7 @@ package com.thinkboxberlin.stepserv.service;
 import com.thinkboxberlin.stepserv.exception.IdentityVerificationFailedException;
 import com.thinkboxberlin.stepserv.model.GetAgentIdRequestDto;
 import com.thinkboxberlin.stepserv.model.GetAgentIdResponseDto;
+import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -29,9 +30,8 @@ public class IdentityVerificationService {
         verifyIdentity(SECOND_LIFE_API_BASE_URL, username, lastname, requestedUuid);
     }
 
-    public void verifyIdentity(final String baseUrl, final String username, final String lastname, final String requestedUuid) throws
-        IdentityVerificationFailedException {
-
+    public void verifyIdentity(final String baseUrl, final String username, final String lastname,
+                               final @NotNull String requestedUuid) throws IdentityVerificationFailedException {
         // For testing on non-connected platform (e.g. Github) the test configuration doesn't require a
         // real validation, hence this method is skipped.
         if (baseUrl.length() == 0) {
@@ -55,7 +55,9 @@ public class IdentityVerificationService {
                 .toEntity(GetAgentIdResponseDto.class)
                 .block();
 
-            if (response.getStatusCode() != HttpStatus.OK || !response.getBody().agent_id().equals(requestedUuid)) {
+            // When arrived at this point, the HTTP status is considered 200 OK, otherwise
+            // a WebClientException would have been thrown.
+            if (!requestedUuid.equals(response.getBody().agent_id())) {
                 throw new IdentityVerificationFailedException();
             }
         } catch(final WebClientException ex) {

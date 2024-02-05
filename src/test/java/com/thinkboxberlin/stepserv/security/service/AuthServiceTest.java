@@ -22,8 +22,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @SpringBootTest
 public class AuthServiceTest {
-    final String TEST_LOGIN = "testuser";
-    final String TEST_PASSWORD = "testpassword";
+    static final String TEST_LOGIN = "testuser";
+    static final String TEST_PASSWORD = "testpassword";
 
     @Mock
     private UserRepository userRepository;

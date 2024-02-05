@@ -13,7 +13,7 @@ security:
       secret-key: ${JWT_SECRET}
 second-life:
   api-base-url: https://api.secondlife.com
-  api-key: 8b09b1e9-6bd2-4519-93c5-0b7ce9d2f3f0
+  api-key: ${SL_API_KEY}
 
 ---
 spring:
@@ -21,7 +21,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     password: post-post
-    url: jdbc:postgresql://172.17.0.2:5432/stepserv
+    url: jdbc:postgresql://localhost:5432/stepserv
     username: postgres
   jpa:
     hibernate:
@@ -32,6 +32,6 @@ security:
       secret-key: ${JWT_SECRET}
 second-life:
   api-base-url: https://api.secondlife.com
-  api-key: 8b09b1e9-6bd2-4519-93c5-0b7ce9d2f3f0
+  api-key: ${SL_API_KEY}
 
 

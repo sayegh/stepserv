@@ -23,11 +23,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 @Slf4j
 public class AuthControllerIntegrationTest {
-    private final String URL_ROOT = "/api/v1/auth";
-    private final String TEST_USER_NAME_SIGNUP = "Test User";
-    private final String TEST_USER_PASSWORD_SIGNUP = "Test Password";
-    private final String TEST_USER_NAME_SIGNIN = "Test User SignIn";
-    private final String TEST_USER_PASSWORD_SIGNIN = "Test Password SignIn";
+    static final String URL_ROOT = "/api/v1/auth";
+    static final String TEST_USER_NAME_SIGNUP = "Test User";
+    static final String TEST_USER_PASSWORD_SIGNUP = "Test Password";
+    static final String TEST_USER_NAME_SIGNIN = "Test User SignIn";
+    static final String TEST_USER_PASSWORD_SIGNIN = "Test Password SignIn";
 
     @Autowired
     private MockMvc mockMvc;
